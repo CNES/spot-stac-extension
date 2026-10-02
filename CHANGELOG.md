@@ -7,14 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.1.0]
+
 ### Added
 
-### Changed
+- First version, moved from the GEODES data model repository (`schemas/extensions/spot/v0.1.0/`).
+- Item fields `spot:sensor_code`, `spot:scene_extent`, `spot:shift_value`, `spot:segment_id`, `spot:scene_rank`,
+  `spot:scene_count`, `spot:scene_id`, `spot:coupled_mode`, `spot:coupling_modes` and `spot:cloud_cover_quotes`.
+- Link field `spot:coupling_mode` for coupled scenes.
+- Collection summaries for the categorical fields.
 
-### Deprecated
+[Unreleased]: <https://github.com/CNES/spot-stac-extension/compare/v0.1.0...HEAD>
 
-### Removed
-
-### Fixed
-
-[Unreleased]: <https://github.com/stac-extensions/template/compare/v0.1.0...HEAD>
+[v0.1.0]: <https://github.com/CNES/spot-stac-extension/tree/v0.1.0>
