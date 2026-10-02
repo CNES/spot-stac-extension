@@ -68,7 +68,8 @@ and `HMA`, `HMB`, `HX` and `SM` for the SPOT 5 THR (2.5 m) mode.
 
 A SPOT scene is either centred on a node of the SPOT Reference Grid (GRS), or shifted along the track by tenths of a scene.
 The value 0 is a scene centred on the node. The GRS node itself goes in the
-[Grid Extension](https://github.com/stac-extensions/grid) field `grid:code`, as `SPOTGRS-<K>-<J>` (for example `SPOTGRS-553-212`).
+[Grid Extension](https://github.com/stac-extensions/grid) field `grid:code`, as `SPOTGRS-<K>_<J>` (for example `SPOTGRS-553_212`).
+This grid code is proposed to the Grid Extension in [stac-extensions/grid#17](https://github.com/stac-extensions/grid/pull/17).
 
 #### spot:segment\_id
 
@@ -106,7 +107,7 @@ A SPOT Item also uses these fields from other extensions:
 
 | SPOT concept                            | STAC field                                                                                      |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| GRS node K-J                            | `grid:code` = `SPOTGRS-<K>-<J>` ([Grid](https://github.com/stac-extensions/grid))               |
+| GRS node K-J                            | `grid:code` = `SPOTGRS-<K>_<J>` ([Grid](https://github.com/stac-extensions/grid))               |
 | Instrument (HRV, HRVIR, HRG, HRS)       | `instruments`, for example `["hrv"]` (STAC common metadata)                                     |
 | Receiving station                       | `sat:acquisition_station` ([SAT](https://github.com/stac-extensions/sat) v1.2.0)                |
 | Incidence and viewing angles            | `view:incidence_angle`, `view:off_nadir` ([View](https://github.com/stac-extensions/view))      |

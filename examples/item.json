@@ -58,7 +58,7 @@
     "processing:level": "L1A",
     "processing:datetime": "2019-09-04T20:25:27Z",
     "product:type": "REFLECTANCETOA",
-    "grid:code": "SPOTGRS-553-212",
+    "grid:code": "SPOTGRS-553_212",
     "sat:acquisition_station": "LM",
     "view:incidence_angle": 13.823308227,
     "view:sun_azimuth": 175.06396238,
