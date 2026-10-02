@@ -1,0 +1,332 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cnes.github.io/spot-stac-extension/v0.1.0/schema.json#",
+  "title": "SPOT Extension",
+  "description": "STAC SPOT Extension for STAC Items and STAC Collections: SPOT 1-5 scene metadata (SPOT and SPOT World Heritage products) that no other STAC extension covers.",
+  "type": "object",
+  "required": [
+    "stac_extensions",
+    "type"
+  ],
+  "properties": {
+    "stac_extensions": {
+      "type": "array",
+      "contains": {
+        "const": "https://cnes.github.io/spot-stac-extension/v0.1.0/schema.json"
+      }
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Collection",
+        "Feature"
+      ]
+    },
+    "links": {
+      "$comment": "Validates spot:coupling_mode on links.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/linkFields"
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$comment": "STAC Items: SPOT scene fields in the item properties.",
+      "type": "object",
+      "required": [
+        "type",
+        "properties"
+      ],
+      "properties": {
+        "type": {
+          "const": "Feature"
+        },
+        "properties": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/require_any_field"
+            },
+            {
+              "$ref": "#/definitions/fields"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "$comment": "STAC Collections: summaries of the SPOT fields.",
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "const": "Collection"
+        },
+        "summaries": {
+          "$ref": "#/definitions/summaries"
+        }
+      }
+    }
+  ],
+  "definitions": {
+    "spot:sensor_code": {
+      "type": "string",
+      "enum": [
+        "A",
+        "B",
+        "J",
+        "I",
+        "X",
+        "P",
+        "M",
+        "S",
+        "HMA",
+        "HMB",
+        "HX",
+        "SM"
+      ],
+      "description": "Identifier of the sensor (acquisition mode) that acquired the scene (DIMAP SENSOR_CODE). SPOT 1-5: A, B, J, I, X, P, M, S (HRS). SPOT 5 THR: HMA, HMB, HX, SM."
+    },
+    "spot:scene_extent": {
+      "type": "string",
+      "enum": [
+        "full",
+        "extract"
+      ],
+      "description": "'full' for a complete scene, 'extract' for a scene cut to an area of interest (SPOT 5 'monoZIG' option, S-ST-73-02-SI section 9.1.2)."
+    },
+    "spot:shift_value": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9,
+      "description": "Shift Along the Track (SAT) of the scene relative to the GRS node, in tenths of a scene (DIMAP SHIFT_VALUE). 0 is a scene centred on the GRS node."
+    },
+    "spot:segment_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of the segment that contains the scene (GERALD name). A segment is one continuous acquisition by one instrument in one mode, received by one station. Interim field: replaced by a SAT extension datatake identifier when one exists."
+    },
+    "spot:scene_rank": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Position of the scene in its segment, from 1 to spot:scene_count."
+    },
+    "spot:scene_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of scenes in the segment."
+    },
+    "spot:scene_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Compact SPOT scene key (satellite, K, J, date, time, instrument index, sensor code). Used as the join key between coupled scenes."
+    },
+    "spot:coupled_mode": {
+      "type": "boolean",
+      "description": "True if the scene was acquired at the same time as one or more scenes in another mode (for example panchromatic and multispectral)."
+    },
+    "spot:coupling_modes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Mode combinations of the coupled acquisition, for example 'PAN+XS'."
+    },
+    "spot:cloud_cover_quotes": {
+      "type": "string",
+      "pattern": "^[A-E]{8}$",
+      "description": "SPOT catalogue cloud notation: one letter per sub-area of the scene (8 sub-areas), from A (clear) to E (cloudy)."
+    },
+    "spot:coupling_mode": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Coupling mode of the linked scene, from the legacy coupled_scenes_<mode> field name (for example 'px', 'thr', 'hmx'). Only on links with rel 'related'."
+    },
+    "require_any_field": {
+      "$comment": "An Item that declares this extension carries at least one SPOT field.",
+      "anyOf": [
+        {
+          "required": [
+            "spot:sensor_code"
+          ]
+        },
+        {
+          "required": [
+            "spot:scene_extent"
+          ]
+        },
+        {
+          "required": [
+            "spot:shift_value"
+          ]
+        },
+        {
+          "required": [
+            "spot:segment_id"
+          ]
+        },
+        {
+          "required": [
+            "spot:scene_rank"
+          ]
+        },
+        {
+          "required": [
+            "spot:scene_count"
+          ]
+        },
+        {
+          "required": [
+            "spot:scene_id"
+          ]
+        },
+        {
+          "required": [
+            "spot:coupled_mode"
+          ]
+        },
+        {
+          "required": [
+            "spot:coupling_modes"
+          ]
+        },
+        {
+          "required": [
+            "spot:cloud_cover_quotes"
+          ]
+        }
+      ]
+    },
+    "fields": {
+      "$comment": "SPOT item fields. Not required here; see require_any_field.",
+      "type": "object",
+      "properties": {
+        "spot:sensor_code": {
+          "$ref": "#/definitions/spot:sensor_code"
+        },
+        "spot:scene_extent": {
+          "$ref": "#/definitions/spot:scene_extent"
+        },
+        "spot:shift_value": {
+          "$ref": "#/definitions/spot:shift_value"
+        },
+        "spot:segment_id": {
+          "$ref": "#/definitions/spot:segment_id"
+        },
+        "spot:scene_rank": {
+          "$ref": "#/definitions/spot:scene_rank"
+        },
+        "spot:scene_count": {
+          "$ref": "#/definitions/spot:scene_count"
+        },
+        "spot:scene_id": {
+          "$ref": "#/definitions/spot:scene_id"
+        },
+        "spot:coupled_mode": {
+          "$ref": "#/definitions/spot:coupled_mode"
+        },
+        "spot:coupling_modes": {
+          "$ref": "#/definitions/spot:coupling_modes"
+        },
+        "spot:cloud_cover_quotes": {
+          "$ref": "#/definitions/spot:cloud_cover_quotes"
+        }
+      },
+      "patternProperties": {
+        "^(?!spot:)": {
+          "$comment": "Do not allow other fields with this prefix"
+        }
+      },
+      "additionalProperties": false
+    },
+    "linkFields": {
+      "type": "object",
+      "properties": {
+        "spot:coupling_mode": {
+          "$ref": "#/definitions/spot:coupling_mode"
+        }
+      },
+      "if": {
+        "required": [
+          "spot:coupling_mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "rel": {
+            "const": "related"
+          }
+        }
+      }
+    },
+    "summaries": {
+      "type": "object",
+      "properties": {
+        "spot:sensor_code": {
+          "type": [
+            "array",
+            "object"
+          ],
+          "items": {
+            "$ref": "#/definitions/spot:sensor_code"
+          }
+        },
+        "spot:scene_extent": {
+          "type": [
+            "array",
+            "object"
+          ],
+          "items": {
+            "$ref": "#/definitions/spot:scene_extent"
+          }
+        },
+        "spot:shift_value": {
+          "type": [
+            "array",
+            "object"
+          ],
+          "items": {
+            "$ref": "#/definitions/spot:shift_value"
+          },
+          "properties": {
+            "minimum": {
+              "$ref": "#/definitions/spot:shift_value"
+            },
+            "maximum": {
+              "$ref": "#/definitions/spot:shift_value"
+            }
+          }
+        },
+        "spot:coupled_mode": {
+          "type": [
+            "array",
+            "object"
+          ],
+          "items": {
+            "$ref": "#/definitions/spot:coupled_mode"
+          }
+        },
+        "spot:coupling_modes": {
+          "type": [
+            "array",
+            "object"
+          ],
+          "items": {
+            "$ref": "#/definitions/spot:coupling_modes"
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!spot:)": {
+          "$comment": "Do not allow other fields with this prefix"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
