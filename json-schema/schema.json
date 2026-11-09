@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://cnes.github.io/spot-stac-extension/v0.1.0/schema.json#",
+  "$id": "https://cnes.github.io/spot-stac-extension/v0.2.0/schema.json#",
   "title": "SPOT Extension",
   "description": "STAC SPOT Extension for STAC Items and STAC Collections: SPOT 1-5 scene metadata (SPOT and SPOT World Heritage products) that no other STAC extension covers.",
   "type": "object",
@@ -12,7 +12,7 @@
     "stac_extensions": {
       "type": "array",
       "contains": {
-        "const": "https://cnes.github.io/spot-stac-extension/v0.1.0/schema.json"
+        "const": "https://cnes.github.io/spot-stac-extension/v0.2.0/schema.json"
       }
     },
     "type": {
@@ -139,8 +139,8 @@
     },
     "spot:cloud_cover_quotes": {
       "type": "string",
-      "pattern": "^[A-E]{8}$",
-      "description": "SPOT catalogue cloud notation: one letter per sub-area of the scene (8 sub-areas), from A (clear) to E (cloudy)."
+      "pattern": "^([A-E]{8}|[A-E]{16})$",
+      "description": "SPOT catalogue cloud notation: one letter per sub-area of the scene, from A (clear) to E (cloudy). 8 letters for a 60 km x 60 km scene, 16 letters for a SPOT 5 HRS scene (120 km x 60 km, spot:sensor_code 'S')."
     },
     "spot:coupling_mode": {
       "type": "string",
@@ -242,7 +242,27 @@
           "$comment": "Do not allow other fields with this prefix"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "if": {
+        "$comment": "16 cloud cover quotes are only for SPOT 5 HRS scenes (spot:sensor_code 'S').",
+        "required": [
+          "spot:sensor_code"
+        ],
+        "properties": {
+          "spot:sensor_code": {
+            "not": {
+              "const": "S"
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "spot:cloud_cover_quotes": {
+            "pattern": "^[A-E]{8}$"
+          }
+        }
+      }
     },
     "linkFields": {
       "type": "object",

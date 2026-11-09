@@ -1,0 +1,81 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://cnes.github.io/spot-stac-extension/v0.2.0/schema.json",
+    "https://stac-extensions.github.io/eo/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/grid/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/processing/v1.2.0/schema.json",
+    "https://stac-extensions.github.io/view/v1.0.0/schema.json"
+  ],
+  "id": "S5_046-262-0_2003-08-15-10-50-12_HRS-1_S_PA_TS",
+  "collection": "swh-spot-5-l1a",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.012,
+          44.121
+        ],
+        [
+          1.761,
+          44.012
+        ],
+        [
+          1.598,
+          42.938
+        ],
+        [
+          0.861,
+          43.046
+        ],
+        [
+          1.012,
+          44.121
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    0.861,
+    42.938,
+    1.761,
+    44.121
+  ],
+  "properties": {
+    "datetime": "2003-08-15T10:50:12Z",
+    "platform": "spot-5",
+    "constellation": "spot",
+    "instruments": [
+      "hrs"
+    ],
+    "processing:level": "L1A",
+    "grid:code": "SPOTGRS-46_262",
+    "view:incidence_angle": 20,
+    "eo:cloud_cover": 3,
+    "spot:sensor_code": "S",
+    "spot:scene_extent": "full",
+    "spot:shift_value": 0,
+    "spot:scene_id": "50462620308151050121S",
+    "spot:coupled_mode": false,
+    "spot:cloud_cover_quotes": "AAAABBAAAABCCBAA"
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "https://geodes.cnes.fr/api/stac/collections/swh-spot-5-l1a",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "data": {
+      "href": "https://example.com/swh-l1a/S5/2003/08/15/S5_046-262-0_2003-08-15-10-50-12_HRS-1_S_PA_TS.zip",
+      "type": "application/zip",
+      "title": "SPOT scene, DIMAP (GeoTIFF + XML metadata)",
+      "roles": [
+        "data"
+      ]
+    }
+  }
+}

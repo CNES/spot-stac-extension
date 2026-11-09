@@ -1,7 +1,7 @@
 # SPOT Extension Specification
 
 - **Title:** SPOT
-- **Identifier:** <https://cnes.github.io/spot-stac-extension/v0.1.0/schema.json>
+- **Identifier:** <https://cnes.github.io/spot-stac-extension/v0.2.0/schema.json>
 - **Field Name Prefix:** spot
 - **Scope:** Item, Collection
 - **Extension [Maturity Classification](https://github.com/radiantearth/stac-spec/tree/master/extensions/README.md#extension-maturity):** Proposal
@@ -16,6 +16,7 @@ and the SPOT catalogue cloud notation. CNES uses it for the SPOT World Heritage 
 
 - Examples:
   - [Item example](examples/item.json): A SPOT-2 panchromatic scene with a coupled multispectral scene
+  - [HRS Item example](examples/item-hrs.json): A SPOT-5 HRS scene with 16 cloud cover quotes
   - [Collection example](examples/collection.json): Summaries of the SPOT fields in a STAC Collection
 - [JSON Schema](json-schema/schema.json)
 - [Changelog](./CHANGELOG.md)
@@ -53,7 +54,7 @@ The fields in the table below can be used in these parts of STAC documents:
 | spot:scene\_id            | string    | Compact SPOT scene key. It is the join key between coupled scenes.                            |
 | spot:coupled\_mode        | boolean   | `true` if the scene was acquired at the same time as scenes in another mode.                  |
 | spot:coupling\_modes      | \[string] | Mode combinations of the coupled acquisition, for example `PAN+XS`.                           |
-| spot:cloud\_cover\_quotes | string    | SPOT catalogue cloud notation: 8 letters, one per sub-area, from `A` (clear) to `E` (cloudy). |
+| spot:cloud\_cover\_quotes | string    | SPOT catalogue cloud notation: 8 or 16 letters, one per sub-area, from `A` to `E`.            |
 
 An Item that declares this extension must have at least one of these fields.
 
@@ -79,8 +80,15 @@ reads SPOT 5, HRG 1, sensor A, mode DT, segment start 2007-09-30 17:03:55.9, sta
 
 #### spot:cloud\_cover\_quotes
 
-The SPOT catalogue gives one cloud note per sub-area of the scene (8 sub-areas), from `A` (clear) to `E` (cloudy),
-for example `BDADBDBE`. Use `eo:cloud_cover` from the [EO Extension](https://github.com/stac-extensions/eo)
+The SPOT catalogue gives one cloud note per sub-area of the scene, from `A` (clear) to `E` (cloudy).
+Each sub-area covers approximately 450 km². The number of letters depends on the scene size:
+
+- 8 letters for a 60 km x 60 km scene (SPOT 1 to 4 HRV and HRVIR, SPOT 5 HRG and THR), for example `BDADBDBE`.
+- 16 letters for a SPOT 5 HRS scene (`spot:sensor_code` = `S`), which is 120 km x 60 km,
+  for example `AAAABBAAAABCCBAA`.
+
+If `spot:sensor_code` is present and is not `S`, the value must have 8 letters.
+Use `eo:cloud_cover` from the [EO Extension](https://github.com/stac-extensions/eo)
 for the overall cloud percentage.
 
 ## Link fields
